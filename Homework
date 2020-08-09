@@ -1,0 +1,278 @@
+create table bookcase
+(
+bcid int,
+location VARCHAR(15),
+shelf-num int,
+capacity int,
+primary key (bcid)
+)
+Engine=innodb
+;
+
+create table book_bookcase
+(
+bcid int,
+bookid int,
+qty int,
+foreign key (bcid) references (bcid),
+foreign key (bookid) references (bookid)
+)
+Engine=innodb
+;
+
+insert into bookcase(bcid, location, shelf_num, capacity)
+Values (100, 'room 303', 6, 50), (101, 'room 201', 5, 50), (103, 'room 303', 5, 20)
+
+insert into book(bcid, bookid, qty)
+Values (100,1001,277), (101,1001,200), (101,1002,22), (102,1002,141), (103,1003,74)
+;
+
+#one
+select c.name, b.title
+from customer as c, book as b, trans as t
+where c.id=t.id and b.bookid=t.bookid and tdate between "2017-10-1" and "2017-10-31"
+;
+
+#two
+select b.title, sum(q.qty)
+from book as b, qty as q
+where b.bookid=q.bookid
+	group by b.title
+;
+
+#three
+update customer 
+set phone="999-867-5309"
+where name= "Jenny"
+;
+
+#four
+alter table book
+add type VARCHAR(50)
+not null;
+
+update book set type= "Hardcover"
+where bookid= 1001;
+
+update book set type= "paper"
+where bookid= 1002;
+
+update book set type= "ebook"
+where bookid= 1003;
+
+create table artist
+        (
+        id int not null,
+        fname varchar(50),
+        lname varchar(50),
+        dob date,
+        hometown varchar(50),
+        gender varchar(1),
+        primary key (id)
+        )
+engine=innodb;
+
+
+create table band
+        (
+        id int not null,
+        title varchar(50),
+        year_formed varchar(4),
+        primary key (id)
+        )
+engine=innodb;
+
+
+create table member
+        (
+        artist_id int,
+        band_id int,
+        Joined_date date,
+        Leave_date date,
+        Foreign key (artist_id) references artist (id),
+        Foreign key (band_id) references band (id)
+        )
+engine=innodb;
+
+
+create table album
+        (
+        id int not null,
+        Pub_year varchar(4),
+        Title varchar(50),
+        Publisher varchar(50),
+        Media varchar(50),
+Band_id int,
+        Foreign key (band_id) references band (id)
+        )
+engine=innodb;
+
+create table song
+        (
+        album_id int,
+        name varchar(50),
+        song_length varchar(50),
+        foreign key (album_id) references album (id)
+        )
+engine=innodb;
+
+
+
+
+
+
+
+
+
+
+Bands:
+        The Beatles - John Lennon 1000, Paul McCartney 1001, Ringo Starr 1002, George Harrison 1003
+        The Rolling Stones - Mick Jagger 1004, Keith Richards 1005, Ronnie Wood 1006, Brian Jones 1007
+        Fleetwood Mac - Stevie Nicks 1008, Lindsey Buckingham 1009, Christine McVie 1010, Mick Fleetwood 1011
+        Queen - Freddie Mercury1012, Brian May 1013, John Deacon1014, Roger Taylor 1015
+
+
+
+
+insert into artist (id, fname, lname, dob, hometown, gender)
+values(1000, 'John', 'Lennon', '1940-10-09', 'Liverpool', 'm'), (1001, 'Paul', 'McCartney', '1942-06-18', 'Liverpool', 'm'), (1002, 'Ringo', 'Starr', '1940-07-07', 'Liverpool', 'm'), (1003, 'George', 'Harrison', '1943-02-25', 'Liverpool', 'm'), (1004, 'Mick', 'Jagger', '1943-07-26', 'Dartford', 'm'), (1005, 'Keith', 'Richards', '1943-12-18', 'Dartford', 'm'), (1006, 'Ronnie', 'Wood', '1947-06-01', 'Hillingdon', 'm'), (1007, 'Brian', 'Jones', '1942-02-28', 'Cheltenham', 'm'), (1008, 'Stevie', 'Nicks', '1948-05-26', 'Phoenix', 'f'), (1009, 'Lindsey', 'Buckingham', '1949-10-03', 'Palo Alto', 'm'), (1010, 'Christine', 'McVie', '1943-12-07', 'Bouth', 'f'), (1011, 'Mick', 'Fleetwood', '1947-06-24', 'Redruth', 'm'), (1012, 'Freddie', 'Mercury', '1946-09-05', 'Stone Town', 'm'), (1013, 'Brian', 'May', '1947-07-1947', 'Hampton', 'm'), (1014, 'John', 'Deacon', '1951-08-19', 'Oadby', 'm'), (1015, 'Roger', 'Taylor', '1949-07-26', 'King's Lynn', 'm');
+
+
+insert into band(id, title, year_formed)
+values(2000, 'The Beatles', '1957'), (2001, 'The Rolling Stones', '1962'), (2002, 'Fleetwood Mac', '1967'), (2003, 'Queen', '1970');
+
+
+insert into member(artist_id, band_id, joined_date, leave_date)
+Values (1000, 2000, '1957-11-13' ,'1970-04-10'), (1001, 2000, '1958-08-27', '1970-04-10'), (1002, 2000, '1957-03-12', '1970-04-10'), (1003, 2000, '1960-03-27', '1970-04-10'), (1004, 2001, '1962-11-03', null), (1005, 2001, '1962-11-03', '1989-04-01'), (1006, 2001, '1962-11-03', '1967-11-03' ), (1007, 2001, '1962-11-03', '1975-08-01'), (1008, 2002, '1967-07-15', null), (1009, 2002, '1967-07-15', null), (1010, 2002, '1967-07-15', '2005-09-04'), (1011, 2002, '1969-02-20' ,'2015-06-30'), (1012, 2003, '1970-09-01', '1991-11-24'), (1013, 2003, '1970-09-30', '1991-11-24'), (1014, 2003, '1972-01-12', '1991-11-24'), (1015, 2003, '1975-03-14', '1991-11-24');
+
+
+
+
+insert into album(id, pub_year, title, publisher, media, band_id)
+Values (3000, '1969', 'Sgt. Peppers Lonely Hearts Club Band', 'Parlophone', 'Vinyl', 2000), (3001, '1971', 'Sticky Fingers', 'Rolling Stones Records', 'CD', 2001), (3002, '1977', 'Rumours', 'Warner Bros.', 'Vinyl', 2002), (3003, '1975', 'A Night at the Opera', 'Elektra', 'Vinyl', 2003), (3004,'1969', 'Abbey Road', 'Apple Records', 'Vinyl', 2000),(3005, '1969', 'Help!', 'Parlophone', 'Vinyl', 2000), (3006, '1968', 'Beggars Banquet', 'Decca', 'Vinyl', 2001), (3007, '1969', 'Let it Bleed', 'Decca', 'Vinyl', 2001), (3008, '1979', 'Tusk', 'Warner Brothers', 'CD', 2002), (3009, '1997', 'The Dance', 'Warner Brothers', 'CD', 2002), (3010, '1983', 'The Work', 'Capitol', 'Vinyl', 2003);
+
+
+
+
+insert into song (album_ID, name, song_length)
+values(3000, 'Fixing a Hole', '2:20'), (3000, 'Lovely Rita', '4:30'), (3000, 'Getting Better', '3:20'), (3001, 'Sway', '3:37'), (3001, 'Wild Horses', '2:57'), (3001, 'Dead Flowers', '3:56'), (3002, 'Dreams', '2:55'), (3002, 'Songbird', '4:55'), (3002, 'The Chain', '4:03'), (3003, 'Sweet Lady', '2:35'), (3003, 'Love of my Life', '4:05'), (3003, 'Good Company', '4:03'),(3004,'Come Together','3:50'),(3004, 'Something', '3:04'),(3004, 'Here Comes the Sun', '2:55'), (3005, 'Help!', '5:05'), (3005, 'Another Girl', '4:44'), (3005, 'I Need You', '3:33'), (3006, 'Dear Doctor', '4:00'), (3006, 'Factory Girl', '2:55'), (3006, 'Salt of the Earth', '5:55'), (3007, 'Gimme Shelter', '2:57'),(3007,'Live With Me','3:54'),(3007, 'Monkey Man', '3:44'),(3008, 'Sara', '2:39'), (3008, 'Storms', '4:33'), (3008, 'Angel', '3:15'), (3009, 'Tear it up', '3:32'), (3009, 'Hammer to Fall', '1:47'), (3009, 'Machines', '3:29'), (3010, 'song1', '2:44'), (3010, 'song2', '2:05'), (3010, 'song3', '3:04');
+
+
+
+
+-- Select Statements
+-- 1) Given a band name and year it returns
+
+
+Select a.title, a.pub_year, a.media, s.name
+From band as b, album as a, song as s
+Where b.id=a.band_id and s.album_ID=a.id and b.title='The Beatles' and a.pub_year='1969'
+Group by a.title;
+
+
+--2)
+
+
+Select concat(a.fname, ' ', a.lname), b.title, aa.title
+From artist as a,  album as aa, band as b, member as m
+Where a.id=m.artist_id and b.id=aa.band_id
+Having count(m.artist_id) > 2
+Group by m.artist_id;
+
+
+
+
+--3)
+
+
+Select concat(a.fname, ' ', a.lname) as fullname, gender, date_format(a.dob, '%M %D, %Y'), b.title
+From artist as a, band as b, member as m
+Where m.leave_date is null and ((floor(datediff (curdate(), a.dob)/365) < 18) or (year(dob) <1980))
+Group by concat(a.fname, ' ', a.lname);
+1)
+select b.title
+from band as b
+where not exists (
+        select *
+        from artist as a, member as m
+        where a.id=m.artist_id and m.band_id=b.id and a.gender='f'
+        );
+
+
+2)
+
+
+select concat(a.fname, ' ', a.lname) as fullname, floor(datediff(curdate(), a.dob)/365) as age, b.title
+from artist as a, band as b, member as m
+where a.id=m.artist_id and m.band_id=b.id and a.gender='f' and not exists (
+        select al.band_id, count(al.band_id)
+        from album as al
+        where b.id=al.band_id
+        group by al.band_id
+        having count(al.band_id)<2
+        )
+Order by b.title, fullname;
+
+
+3
+Select distinct concat(a.fname, ' ', a.lname) as fullname, m.joined_date, m.leave_date,
+YEAR(m.leave_date) - YEAR(m.joined_date) as years
+FROM artist as a, band as b, member as m
+Where a.id=m.artist_id and m.band_id=b.id
+Group by b.title, fullname,m.joined_date, m.leave_date;
+
+# Q1
+Select m.item_name, m.price, SUM(od.qty) AS qty
+From menu as m, order_detail as od, order_main as om
+Where od.orderid = om.id and m.id = od.menuid and date_format(om.odate, '&Y') = '2012'
+Group By m.item_name
+Order By qty ASC
+Limit 7
+;
+
+# Q2
+Select m.item_name, m.price, sum(od.qty) as qty, (sum(qty)*m.price) as sales
+From menu as m, order_detail as od, order_main as om
+Where od.orderid = om.id and m.id = od.menuid and date_format(om.odate, '%Y') = '2012'
+Group By m.item_name
+Order By sales ASC
+Limit 7
+;
+
+# Q3
+Select m.item_name, m.price, sum(od.qty) as qty, (sum(qty)*m.price) as sales, year(om.odate) as yr
+from menu as m, order_detail as od, order_main as om
+where (od.orderid = om.id and m.id = od.menuid) and (od.menuid = 48 or od.menuid = 32) and date_format(om.odate, '%Y')
+group by yr, m.item_name
+order by m.item_name asc, yr desc
+;
+
+# Q4
+Select date_format(es.wdate, '%b %D %Y') as day, count(*) as empnum
+from emp_shift as es
+where not exists
+	(select *
+	from emp_shift as es2
+	where es2.wdate = es.wdate
+	and es2.role = 'manager')
+	and date_format(es.wdate, '%Y') > 2005
+group by day
+order by es.wdate 
+;
+
+# Q5
+Select Concat(em.fname, ' ', em.lname) as fullname, es2.role , date_format(es2.wdate, '%b %D, %Y') as day
+From emp_shift as es2, employee as em
+where em.id = es2.empid
+and es2.wdate in(
+select es.wdate
+from emp_shift as es
+where not exists
+(select es1.role
+from emp_shift as es1
+where es1.wdate = es.wdate
+and es1.role = 'manager')
+and date_format(es.wdate, '%Y') > 2005
+having count(*)<3)
+order by es2.wdate, em.lname
+;
