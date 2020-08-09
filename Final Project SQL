@@ -1,0 +1,94 @@
+
+1a)
+
+select concat(p.NameFirst, ' ', p.NameLast) as student_name, se.SectionID as sectionID
+from Student as s, Section as se, Person as p
+where se.SectionID = '$section' and s.PersonID=p.PersonID 
+order by p.NameLast asc, p.NameLast asc;
+
+
+
+2b)
+
+select distinct c.RoomID, b.Name as buildingName, cf.Feature
+from Classroom as c, Section as s, Classroom_Feature as cf, Building as b, Room as r
+where cf.Feature = '$feature' and cf.RoomID=s.ClassroomID and s.StartTime="11:15:00" and b.BuildingID=r.BuildingID and c.RoomID=cf.RoomID
+order by c.RoomID asc;
+
+
+
+3b)
+
+Select distinct distinct concat(p.NameFirst, ' ', p.NameLast) as teacher_name
+from Person as p, Section as s, Course as c, Faculty as f where s.FacultyID=f.PersonID 
+and s.CourseID=c.CourseID and p.PersonID=f.PersonID and c.Title != '$course' and c.Title=s.Title and p.PersonID=s.FacultyID;
+
+
+4c)
+
+select distinct concat(p.NameFirst, ' ', p.NameLast) as student_name, sm.Title as title, concat(c.Title, ' ', c.courseNumber) as course_information, g.LetterGrade as Grade
+from Student as s, Course as c, Grade as g, Section as sc, Semester as sm, Person as p, Department as d
+where s.PersonID = g.StudentID and sc.SectionID=g.SectionID and sc.CourseID=c.CourseID and sm.SemesterID=sc.SemesterID and p.PersonID=s.PersonID and c.DepartmentID=d.DepartmentID and s.PersonID and exists(select * from Course as cc, Student_Course as sc2 where sc2.CourseID=cc.PrerequisiteID
+);
+
+
+
+
+5a)
+
+select distinct concat(p.NameFirst, ' ', p.NameLast) as studentName, s.PersonID as studentID, g.LetterGrade as Grade, c.Title as courseTitle, c.CourseID as courseID, c.CourseNumber as courseNumber
+from Course as c, Grade as g, Student as s, Section as sc, Semester as sm, Person as p
+where (g.StudentID = '$student') and c.CourseID=sc.CourseID and g.SectionID=sc.SectionID and g.StudentID=s.PersonID and sm.SemesterID=sc.SemesterID and c.Title=sc.Title and p.PersonID=s.PersonID 
+Order by sm.StartDate;
+
+
+6c)
+
+Select distinct concat(p.NameFirst, ' ', p.NameLast) as studentName, concat(p.NameFirst, ' ', p.NameLast) as facultyName, p.PersonID as ID
+From Student as s, Person as p, Office as o, Section as sec, Course as c, Building as b, Student_Course as sc, Room as r, Faculty as f
+Where r.BuildingID=b.BuildingID and f.OfficeID=o.RoomID and sc.SectionID=sec.SectionID and sc.PersonID=s.PersonID and f.PersonID=p.PersonID and sec.StartTime='$time' and exists (
+Select bb.BuildingID from Building as bb, Room as rr where bb.BuildingID='$building' and rr.BuildingID=bb.BuildingID
+)
+Group by ID;
+
+
+
+7a)
+
+Select distinct s.PersonID as personID, concat(p.NameFirst, ' ', p.NameLast) as studentName, m.Title as major
+from Student as s, Advisor as a, Major as m, Student_Major as sm, Person as p
+where s.AdvisorID = a.PersonID and m.MajorID=sm.MajorID and sm.StudentID=s.PersonID and s.AdvisorID='$advisor' and p.PersonID=s.PersonID
+Group by studentName;
+
+
+9a)
+
+Select m.Title as MajorTitle, d.Name as departmentName, m.GPA_Requirement as MajorRequirements, m.Duration as totalHoursNeeded
+From Major as m, Department as d
+Where m.departmentID=d.departmentID;
+
+
+
+A1)
+
+Select distinct s.PersonID as studentID, concat(p.NameFirst, ' ', p.NameLast) as studentName
+From Student as s, Major as m, Section as sc, Person as p, Student_Major as sm, Student_Course as stu
+Where m.Title = '$major' and sc.DayOfWeek != 'MW' and m.MajorID=sm.MajorID and s.PersonID=sm.StudentID 
+and s.PersonID=stu.PersonID and p.PersonID=s.PersonID;
+
+
+
+A2)
+
+Select concat(p.NameFirst, ' ', p.NameLast) as teacher_name, d.Name as departmentName 
+From Faculty as f, Department as d, Person as p
+Where d.Name = '$department' and p.PersonID=f.PersonID;
+
+
+
+A3)
+
+Select g.studentID as StudentID, concat(p.NameFirst, ' ', p.NameLast) as studentName 
+From Student as s, Grade as g, Course as c, Section as ss, Person as p
+Where s.PersonID=g.StudentID and g.LetterGrade='F' and g.SectionID='$section' and p.PersonID=s.PersonID and p.personID=g.StudentID
+Group by g.studentID;
